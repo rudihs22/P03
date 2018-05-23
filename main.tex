@@ -1,169 +1,148 @@
 \documentclass{report}
-\usepackage[utf8]{inputenc}
+\usepackage{polyglossia}
 \usepackage{fixlatvian}
-\usepackage{tabularx}
 \usepackage{graphicx}
+\usepackage{circuitikz}
+\usepackage{tabularx}
 \usepackage{verbatim}
-\usepackage{caption}
-\usepackage[siunitx, europeanresistors, americaninductors, oldvoltagedirection]{circuitikz}
+\usepackage{float}
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.15}
-
-\title{1. laboratorijas darba ”Vienkāršu elektrisku shēmu modelēšana” atskaites veidošanu ShareLatex vidē}
+\graphicspath{{bildes/}}
+\title{Laboratorijas darba atskaite}
 \author{Rūdolfs Grīnbergs}
-\date{April 2018}
 
 \begin{document}
-
 \maketitle
-\chapter {Teoretiskā daļa}
+%=============================
+\chapter{Teorētiskā daļa}
 \section{Ķēdes aprēķins}
-Jāaprēķina spriegums uz rezistoriem, kuri doti shēmā. Par sprieguma avota vērtību tiek ņemti pēdējie trīs apliecības cipar dalīti ar 10. Bet rezistoru vērtības ir ņemtas tā, ka R1 ir pirmspēdējā cipara vērtība+1, bet R2 ir pēdējā cipara vērtība+1. Mans apliecibas nimurs ir 171REB092, no kura ņemti dati rezistoruvērīām un sprieguma avotam, ko var redzēt tabulā 1.5.
-\begin{equation}
-I=\frac{U}{R}
-\end{equation} 
-\label{eq:1}
-Oma likums(\ref{eq:1}) kā dots literatūrā\cite{Oms}.
-\begin{equation}
-I=\frac{U}{R1+R2}
-\end{equation}
-\begin{equation}
-U_{R1}=I*R_1
-\end{equation}
-\begin{equation}
-U_{R2}=I*R_2
-\end{equation}
+Sprieguma avota V1 vērtība ir studenta apliecības pēdējie trīs cipari dalīti ar 10. R1 ir apliecības pēdējo 3 ciparu otrais numurs + 1, R2 ir apliecības numura pēdējais cipars + 1. Apliecības numurs: 171REB092. Sprieguma kritumu vērtības $U_{R1}$ un $U_{R2}$ tika aprēķinātas pēc formulas:\\ $$U_{R1}=\frac{R1}{R1+R2}\cdot V1$$\\
+Rezultāti ir apskatāmi tabulā \ref{table:ta} un shēma ir aplūkojama attelos \ref{fig:sh} un \ref{fig:sh2} Atskaite tika sagatavota izmantojot sharelatex.com \cite{1} \cite{2} piedāvātos mācību palīglidzekļus, uz kuriem saites ir pieejamas bibliogrāfijas sarakstā, kā arī citus interneta resursus.
 
-\begin{figure}[b]
+
+\begin{table}[h]
 \centering
-\begin{tabular}{|c|r|}
+\begin{tabular}[h]{|c|c|}
 \hline
-R1 & 10 $\Omega$\\
+$R1$ & 10 $\Omega$\\
 \hline
-R2 & 3 $\Omega$\\
+$R2$ & 3 $\Omega$\\
 \hline
-V1 & 9.2V\\
+$V1$ & 9.2 V\\
 \hline
-$U_{R1}$ & 9.2V\\
+$U_{R_1}$ & 9.2 V\\
 \hline
-$U_{R2}$ & 2.76V\\
+$U_{R_2}$ & 2.76 V\\
 \hline
 \end{tabular}
-\captionof{table}{Tabula ar uzdotajiem datiem}\label{tab:1}
-\end{figure}
+\caption{}
+\label{table:ta}
+\end{table}
 
-\begin{figure}
+
+
+\begin{figure}[t]
 \centering
-\begin{circuitikz}[scale=1, every node/.style={transform shape}]
+\begin{circuitikz}
 \draw
-(0,2) to[R=$R1$, -] (4,2)
-(4,2) to[R=$R2$, -] (4,0)
-(0,0) to[short, -] (4,0)
-(0,0) to[american voltage source, v<=$V1$, -] (0,2);
+(0,0) to[european voltage source, l_=$V_1$] (0,4)
+to[european resistor, l_=$R_1$] (4,4)
+to[european resistor, l_=$R_2$] (4,0) -- (0,0)
+;
 \end{circuitikz}
-\caption{Dotās shēmas attēlojums ar "circuitikz" pakas palīdzību.}\label{sch:1}
+\caption{}
+\label{fig:sh}
 \end{figure}
 
-\begin{figure}
-\begin{center}
+\begin{figure}[!b]
+\centering
 \begin{tikzpicture}
 \begin{axis}[
-    xlabel=$R2$,
-    ylabel=$U_{R2}$
-    ]
-\addplot[color=green,mark=o] coordinates {
-		(5,3.07)
-		(10,4.6)
-		(15,5.52)
-		(20,6.13)
-		(25,6.57)
-		(30,6.9)
-		(35,7.16)
-		(40,7.36)
-		(45,7.53)
-		(50,7.67)
-	};
+    title={$U_{R_{2}}=f(R_2)$},
+    xlabel={$R_2$ [$\Omega$]},
+    ylabel={$U_{R_{2}}$ [V]},
+    xmin=5, xmax=50,
+    ymin=0, ymax=15,
+    xtick={0,10,20,30,40,50},
+    ytick={0,5,10,15},
+    ymajorgrids=true,
+    xmajorgrids=true,
+    grid style=dashed,
+]
+\addplot[color=blue,]
+    coordinates {
+    (5,3.07)(10,4.6)(15,5.52)(20,6.13)(25,6.57)(30,6.9)(35,7.16)(40,7.36)(45,7.53)(50,7.67)
+    };
 \end{axis}
 \end{tikzpicture}
-\caption{$U_{R2}$=\textit{f}(\textit{R2}) grafiks, pēc sweep simulācijas datiem.}\label{graph:1}
-\end{center}
+\caption{}
+\label{fig:gr}
 \end{figure}
-
-
-\chapter {Praktiskā daļa}
-\section {Darbs ar GEDA programmām}
-\subsection{darbs ar gschem \cite{gschem}}
-Shēma redzama \ref{att:1} attēlā
-
-\begin{figure}[b!]
-\centering
-\includegraphics[width=9cm]{01.png}
-\captionof{figure}{gschem shēma}
-\label{att:1}
+%=============================
+\chapter{Praktiskā daļa}
+\section{Darbs ar GEDA programmām}
+\subsection{Darbs ar gschem}
+\begin{figure}[h]
+    \centering
+    \includegraphics{01.png}
+    \caption{}
+    \label{fig:sh2}
 \end{figure}
 
 \newpage
-\subsection{darbs ar gnetlist}
-\begin{verbatim}
-    * Spice netlister for gnetlist
-    v1 2 0 9.2
-    R2 0 1 3
-    R1 2 1 10
-    .END
-\end{verbatim}
-\subsection{darbs ar ngspice}
+\subsection{Darbs ar gnetlist}
+\verbatiminput{bildes/01.net}
 
-\begin{figure}[b!]
-\centering
-\begin{minipage}{.5\textwidth}
-\centering
-\includegraphics[width=6cm]{012.ps}
-\captionof{figure}{Spriegums punktā 1 pret zemi}
-\label{att:2}
-\end{minipage}
-
-\begin{minipage}{.5\textwidth}
-\centering
-\includegraphics[width=6cm]{011.ps}
-\captionof{figure}{Spriegums punktā 2 pret zemi}
-\label{att:3}
-\end{minipage}
+\subsection{Darbs ar ngspice}
+Skatīt attēlus \ref{fig:2.1} un \ref{fig:2.2} 
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=10cm]{012.ps}
+    \caption{Spriegums 1.vadā}
+    \label{fig:2.1}
+    \end{figure}
+ \begin{figure}[t]
+ \centering
+    \includegraphics[width=10cm]{011.ps}
+    \caption{Spriegums 2.vadā}
+    \label{fig:2.2}
 \end{figure}
-
 \newpage
+
 \section{Darbs ar QUCS programmām}
-Pēc sweep simulācijas (att. \ref{att:4}) var redzēt, ka mainoties R2 vērtībai no 5$ \Omega$ līdz 50$ \Omega$ spriegums izejas punktā palielinās (graf. \ref{att:5}). Jo lielāka R2 vērtība, jo lielāks izejas spriegums.
-
-
-\begin{figure}[b!]
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{QUCS.png}
+    \caption{QUCS shēma}
+    \label{fig:2.3}
+    \end{figure}
+ 
+\begin{figure}[t] 
 \centering
-\rotatebox{270} {\includegraphics[width=\columnwidth]{01.ps}}
-\captionof{figure}{}
-\label{att:4}
+    \includegraphics[width=\textwidth, height=220 pt, keepaspectratio]{sweep.png}
+    \caption{Sweep simulācijas tabula}
+    \label{fig:2.4}
 \end{figure}
 
-\begin{figure}[b!]
+\newpage
+
+\begin{figure}[h]
 \centering
-\rotatebox{-90}{\includegraphics[width=\columnwidth]{02.ps}}
-\captionof{figure}{}
-\label{att:5}
+ \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{Graf.png}
+    \caption{Līdzstrāvas simulācijas grafiks}
+    \label{fig:2.5}
 \end{figure}
+\label{s_nobeigums}
 
+\begin{thebibliography}{9}
+\bibitem{1} 
+\textit{CircuiTikz package.} [Skatīts 2018. gada 27. martā].
+Pieejams: http://www.sharelatex.com/learn/CircuiTikz\_{}package
 
-
-
-\chapter{Secinājumi}
-\begin{itemize}
-\item Šajā laboratorijas darbā sāku apgūt shareLaTeX programmu, kā arī ar dažas citas simulācijas programām, kas ļoti palīdzēs arī citos priekšmetos, piemēram, kādos laboratorijas datbos;
-\item Sāku apgūt LaTeX valodu;
-\item Veicu pirmā laboratorijas darba atskaiti.
-\end{itemize}
-
-\begin{thebibliography}{1}
-\bibitem{Oms}
-Ohm's Law, Electrical Math and Voltage Drop Calculations (Revised Edition) by Tom Henry (December 1, 1992)
-\bibitem{gschem}
- Goering, Richard (2004-12-13). "Do-it-yourselfer's EDA project wins open-source fans"
+\bibitem{2} 
+\textit{Pgfplots package.} [Skatīts 2018. gada 27. martā].
+Pieejams: http://www.sharelatex.com/learn/Pgfplots\_{}package
+ 
 \end{thebibliography}
 
 \end{document}
